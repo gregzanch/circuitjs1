@@ -1,0 +1,101 @@
+<cir f="1" ts="0.001" ic="10" cb="50" pb="50" vr="5" mts="1e-6">
+
+  <!--
+    74HC123 Dual Retriggerable Monostable Multivibrator — Example Circuit
+    ======================================================================
+
+    Supply: VCC = 5 V (pin top-centre), GND (pin bottom-centre).
+    All logic thresholds and output levels track the connected supply.
+
+    A 1 Hz square-wave clock drives both sections:
+
+      Section 1 — LEADING-EDGE trigger (B input)
+        • 1Ā  = GND (LOW)  → B trigger always armed
+        • 1B  = 1 Hz clock → rising edge fires a 450 ms pulse on 1Q
+        • 1R̄  = 5 V (HIGH) → reset inactive
+
+      Section 2 — TRAILING-EDGE trigger (Ā input), with manual Reset
+        • 2Ā  = 1 Hz clock → falling edge fires a 900 ms pulse on 2Q
+        • 2B  = 5 V (HIGH) → Ā trigger always armed
+        • 2R̄  = logic-input button (starts HIGH = inactive)
+          → click button to drive LOW and immediately cancel the pulse
+
+    Pulse widths:
+        tW₁ = 0.45 × 100 kΩ × 10 µF = 450 ms   (Section 1)
+        tW₂ = 0.45 × 100 kΩ × 20 µF = 900 ms   (Section 2)
+
+    Pin post coordinates (chip x1=432, y1=160, cspc2=32, sizeX=4, sizeY=7):
+      W-side  x=432  →  1Ā(y=160) 1B(y=192) 1R̄(y=224) | 2Ā(y=288) 2B(y=320) 2R̄(y=352)
+      E-side  x=592  →  1Q̄(y=160) 1Q(y=192)            | 2Q(y=288) 2Q̄(y=320)
+      N-side  pos 2  →  VCC at (528, 128)
+      S-side  pos 2  →  GND at (528, 384)
+  -->
+
+  <!-- ═══════════════════════════ 74HC123 chip ═════════════════════════════ -->
+  <HC123 x="432 160 592 160" f="0" rx1="100000" cx1="0.00001" rx2="100000" cx2="0.00002"/>
+
+  <!-- ─── Supply rails ─────────────────────────────────────────────────── -->
+
+  <!-- VCC = 5 V DC rail → VCC pin (528, 128) -->
+  <R x="528 128 528 96" f="0" wf="0" maxv="5"/>
+
+  <!-- GND → GND pin (528, 384) -->
+  <g x="528 384 528 416" f="0"/>
+
+  <!-- ─── Section 1 inputs ─────────────────────────────────────────────── -->
+
+  <!-- 1Ā = GND (LOW): tie to ground so the B trigger is always armed -->
+  <g x="320 160 320 176" f="0"/>
+  <w x="320 160 432 160" f="0"/>
+
+  <!-- 1B = 1 Hz square clock, 0 V → 5 V rising edge triggers -->
+  <R x="240 192 176 192" f="0" wf="2" fr="1" maxv="2.5" bias="2.5"/>
+  <w x="240 192 432 192" f="0"/>
+
+  <!-- 1R̄ = 5 V (HIGH): reset kept inactive -->
+  <R x="320 224 256 224" f="0" wf="0" maxv="5"/>
+  <w x="320 224 432 224" f="0"/>
+
+  <!-- ─── Section 2 inputs ─────────────────────────────────────────────── -->
+
+  <!-- 2Ā = same 1 Hz clock: falling edge triggers -->
+  <w x="240 192 240 288" f="0"/>
+  <w x="240 288 432 288" f="0"/>
+
+  <!-- 2B = 5 V (HIGH): Ā trigger always armed -->
+  <R x="320 320 256 320" f="0" wf="0" maxv="5"/>
+  <w x="320 320 432 320" f="0"/>
+
+  <!-- 2R̄ = push button, starts HIGH (p=1, inactive).
+       Click to drive LOW → immediately resets and holds the pulse LOW. -->
+  <L x="320 352 256 352" f="0" p="1"/>
+  <w x="320 352 432 352" f="0"/>
+
+  <!-- ─── Output indicators ─────────────────────────────────────────────── -->
+  <M x="592 160 704 160" f="0"/>
+  <M x="592 192 704 192" f="0"/>
+  <M x="592 288 704 288" f="0"/>
+  <M x="592 320 704 320" f="0"/>
+
+  <!-- ─── Labels ────────────────────────────────────────────────────────── -->
+
+  <x x="432 90 720 93"   f="0" si="18" te="74HC123 Dual Monostable Demo"/>
+
+  <x x="432 138 760 141" f="0" si="12" te="Sec 1 — tW = 0.45 x 100k x 10uF = 450 ms (B leading-edge triggered)"/>
+  <x x="432 266 760 269" f="0" si="12" te="Sec 2 — tW = 0.45 x 100k x 20uF = 900 ms (A trailing-edge triggered)"/>
+
+  <x x="148 174 238 177" f="0" si="12" te="CLK 1 Hz"/>
+  <x x="330 140 430 143" f="0" si="12" te="1A = LOW"/>
+  <x x="330 204 430 207" f="0" si="12" te="1R = HIGH"/>
+  <x x="330 300 430 303" f="0" si="12" te="2B = HIGH"/>
+  <x x="162 332 430 335" f="0" si="12" te="2R — click to RESET (LOW)"/>
+
+  <x x="540 100 640 103" f="0" si="12" te="VCC 5 V"/>
+  <x x="540 420 640 423" f="0" si="12" te="GND"/>
+
+  <x x="708 142 830 145" f="0" si="12" te="1Q-bar (inverted)"/>
+  <x x="708 174 830 177" f="0" si="12" te="1Q  (HIGH for 450 ms)"/>
+  <x x="708 270 830 273" f="0" si="12" te="2Q  (HIGH for 900 ms)"/>
+  <x x="708 302 830 305" f="0" si="12" te="2Q-bar (inverted)"/>
+
+</cir>

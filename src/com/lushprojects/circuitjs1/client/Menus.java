@@ -416,7 +416,8 @@ public class Menus {
 		"Add Static RAM", "SRAMElm",
 		"Add ROM", "ROMElm",
 		"Add Bus Transceiver", "BusTransceiverElm",
-		"Add Bus Splitter", "BusSplitterElm"
+		"Add Bus Splitter", "BusSplitterElm",
+		"Add 74HC123 (Dual Monostable)", "HC123Elm"
 	});
     	mainMenuBar.addItem(SafeHtmlUtils.fromTrustedString(CheckboxMenuItem.checkBoxHtml+Locale.LS("&nbsp;</div>Digital Chips")), chipMenuBar);
     	
